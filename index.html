@@ -8,6 +8,7 @@
 </head>
 <body>
   <div id="app">
+
     <!-- Header -->
     <header class="header">
       <div class="header-inner">
@@ -30,30 +31,48 @@
       </div>
     </header>
 
-    <!-- Weekly Overview -->
+    <!-- Weekly Bar (mobile only) -->
     <section class="weekly-bar">
       <div class="week-days" id="week-days"></div>
     </section>
 
-    <!-- Main Content -->
-    <main class="main" id="main-content">
-      <!-- Day Detail View -->
-      <div id="view-day" class="view active">
-        <div class="day-header" id="day-header"></div>
-        <div class="exercises-list" id="exercises-list"></div>
-        <div class="day-actions" id="day-actions"></div>
-      </div>
+    <!-- Layout wrapper -->
+    <div class="layout-wrapper">
 
-      <!-- Stats View -->
-      <div id="view-stats" class="view">
-        <div class="stats-grid" id="stats-grid"></div>
-      </div>
+      <!-- Sidebar (desktop only) -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-card">
+          <div class="sidebar-title">Lịch tuần</div>
+          <div class="sidebar-day-list" id="sidebar-day-list"></div>
+        </div>
+        <div class="sidebar-card">
+          <div class="sidebar-title">Thống kê nhanh</div>
+          <div class="sidebar-stats-row" id="sidebar-stats"></div>
+        </div>
+      </aside>
 
-      <!-- History View -->
-      <div id="view-history" class="view">
-        <div class="history-list" id="history-list"></div>
-      </div>
-    </main>
+      <!-- Main content -->
+      <main class="main" id="main-content">
+
+        <!-- Day Detail View -->
+        <div id="view-day" class="view active">
+          <div class="day-header" id="day-header"></div>
+          <div class="exercises-list" id="exercises-list"></div>
+          <div class="day-actions" id="day-actions"></div>
+        </div>
+
+        <!-- Stats View -->
+        <div id="view-stats" class="view">
+          <div class="stats-grid" id="stats-grid"></div>
+        </div>
+
+        <!-- History View -->
+        <div id="view-history" class="view">
+          <div class="history-list" id="history-list"></div>
+        </div>
+
+      </main>
+    </div><!-- /layout-wrapper -->
 
     <!-- Timer Modal -->
     <div class="modal-overlay" id="timer-modal" style="display:none">
@@ -72,7 +91,8 @@
 
     <!-- Toast -->
     <div class="toast" id="toast"></div>
-  </div>
+
+  </div><!-- /app -->
 
   <script src="data.js"></script>
   <script src="app.js"></script>
