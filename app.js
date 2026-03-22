@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   currentDayIdx = new Date().getDay();
   renderHeader();
   renderWeeklyBar();
+  renderSidebar();
   renderDayView(currentDayIdx);
   renderStats();
   renderHistory();
@@ -150,6 +151,90 @@ function getThisWeekDate(targetDayIdx) {
   const d = new Date(today);
   d.setDate(d.getDate() + diff);
   return d;
+}
+
+/* ============================================================
+   SIDEBAR (desktop)
+   ============================================================ */
+function renderSidebar() {
+  renderSidebarDayList();
+  renderSidebarStats();
+}
+
+function renderSidebarDayList() {
+  const el = document.getElementById('sidebar-day-list');
+  if (!el) return;
+  const logs = getLogs();
+  const todayIdx = new Date().getDay();
+  el.innerHTML = '';
+
+  DAY_ORDER.forEach(idx => {
+    const day = SCHEDULE[idx];
+    const dateForDay = getThisWeekDate(idx);
+    const key = getDateKey(dateForDay);
+    const log = logs[key];
+    const isDone = log && log.completed;
+    const isToday = idx === todayIdx;
+    const isActive = idx === currentDayIdx;
+
+    const item = document.createElement('div');
+    item.className = `sidebar-day-item${isActive ? ' active' : ''}${isDone ? ' done' : ''}`;
+    item.innerHTML = `
+      <div class="sd-icon">${day.icon}</div>
+      <div class="sd-info">
+        <div class="sd-name" style="color:${isActive ? day.color : ''}">${day.day}</div>
+        <div class="sd-focus">${day.focus}</div>
+      </div>
+      ${isDone ? '<div class="sd-check">✓</div>' : ''}
+      ${isToday && !isDone ? '<div class="sd-today-dot"></div>' : ''}
+    `;
+    item.addEventListener('click', () => {
+      currentDayIdx = idx;
+      renderSidebar();
+      renderWeeklyBar();
+      renderDayView(idx);
+      showView('day');
+      document.getElementById('btn-stats').classList.remove('active');
+      document.getElementById('btn-history').classList.remove('active');
+    });
+    el.appendChild(item);
+  });
+}
+
+function renderSidebarStats() {
+  const el = document.getElementById('sidebar-stats');
+  if (!el) return;
+  const logs = getLogs();
+  const entries = Object.entries(logs);
+  const totalWorkouts = entries.filter(([,v]) => v.completed).length;
+  const totalSets = entries.reduce((acc, [,v]) => {
+    if (!v.sets) return acc;
+    return acc + Object.values(v.sets).filter(s => s.done).length;
+  }, 0);
+  const streak = parseInt(document.getElementById('streak-count').textContent) || 0;
+  const weekDone = DAY_ORDER.filter(idx => {
+    const d = getThisWeekDate(idx);
+    return logs[getDateKey(d)]?.completed;
+  }).length;
+
+  el.innerHTML = `
+    <div class="mini-stat">
+      <div class="mini-stat-val">${totalWorkouts}</div>
+      <div class="mini-stat-lbl">Buổi tập</div>
+    </div>
+    <div class="mini-stat">
+      <div class="mini-stat-val green">${totalSets}</div>
+      <div class="mini-stat-lbl">Tổng sets</div>
+    </div>
+    <div class="mini-stat">
+      <div class="mini-stat-val orange">${streak}</div>
+      <div class="mini-stat-lbl">Chuỗi ngày</div>
+    </div>
+    <div class="mini-stat">
+      <div class="mini-stat-val">${weekDone}</div>
+      <div class="mini-stat-lbl">Tuần này</div>
+    </div>
+  `;
 }
 
 function hexToRgba(hex, alpha) {
@@ -428,6 +513,7 @@ function toggleSet(setId, ex, dayIdx, dateKey, currentLog) {
   expandedExercise = ex.id;
   renderDayView(dayIdx);
   renderWeeklyBar();
+  renderSidebarStats();
 }
 
 function renderDayActions(day, log, dayIdx, dateKey) {
@@ -453,6 +539,7 @@ function toggleDayComplete(dayIdx, dateKey, markDone) {
   saveDayLog(dayIdx, log, dateKey);
   updateStreak();
   renderWeeklyBar();
+  renderSidebar();
   renderDayView(dayIdx);
   if (markDone) showToast('🎉 Tuyệt vời! Buổi tập hoàn thành!');
   else showToast('Đã bỏ đánh dấu hoàn thành.');
