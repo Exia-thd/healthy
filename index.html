@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workout Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-inner">
+        <div class="header-left">
+          <span class="logo">💪</span>
+          <div>
+            <h1 class="header-title">Workout Tracker</h1>
+            <p class="header-sub" id="today-label">Hôm nay: --</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="streak-badge" id="streak-badge">
+            <span class="streak-fire">🔥</span>
+            <span id="streak-count">0</span>
+            <span class="streak-label">ngày</span>
+          </div>
+          <button class="btn-icon" id="btn-stats" title="Thống kê">📊</button>
+          <button class="btn-icon" id="btn-history" title="Lịch sử">📅</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Weekly Overview -->
+    <section class="weekly-bar">
+      <div class="week-days" id="week-days"></div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main" id="main-content">
+      <!-- Day Detail View -->
+      <div id="view-day" class="view active">
+        <div class="day-header" id="day-header"></div>
+        <div class="exercises-list" id="exercises-list"></div>
+        <div class="day-actions" id="day-actions"></div>
+      </div>
+
+      <!-- Stats View -->
+      <div id="view-stats" class="view">
+        <div class="stats-grid" id="stats-grid"></div>
+      </div>
+
+      <!-- History View -->
+      <div id="view-history" class="view">
+        <div class="history-list" id="history-list"></div>
+      </div>
+    </main>
+
+    <!-- Timer Modal -->
+    <div class="modal-overlay" id="timer-modal" style="display:none">
+      <div class="modal-box">
+        <div class="modal-title" id="timer-title">Timer</div>
+        <div class="timer-display" id="timer-display">00:00</div>
+        <div class="timer-round" id="timer-round"></div>
+        <div class="timer-phase" id="timer-phase"></div>
+        <div class="timer-progress-bar"><div id="timer-bar" class="timer-bar-fill"></div></div>
+        <div class="modal-actions">
+          <button class="btn btn-secondary" id="timer-pause">⏸ Tạm dừng</button>
+          <button class="btn btn-danger" id="timer-stop">✕ Dừng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
